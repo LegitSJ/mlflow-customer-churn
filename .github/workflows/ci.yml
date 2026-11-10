@@ -61,4 +61,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ steps.owner.outputs.name }}/customer-churn-api:latest
+          tags: |
+            ghcr.io/${{ steps.owner.outputs.name }}/customer-churn-api:latest
+            ghcr.io/${{ steps.owner.outputs.name }}/customer-churn-api:${{ github.sha }}
