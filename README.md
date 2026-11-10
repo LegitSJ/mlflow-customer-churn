@@ -189,7 +189,9 @@ mlflow-customer-churn/
 
 ## Future Improvements
 
-- Implement automated testing and CI using GitHub Actions.
+- Add continuous deployment (CD) to automate Docker image builds and publishing.
+- Implement model monitoring and data drift detection.
+- Explore model retraining automation.
 - Add model versioning and model registry workflows.
 - Improve monitoring of model performance and prediction behavior.
 - Explore alternative classification algorithms and compare performance.
