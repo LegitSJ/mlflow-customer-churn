@@ -1,0 +1,21 @@
+
+# Python virtual environment
+.venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Pytest
+.pytest_cache/
+
+# MLflow local tracking data
+mlruns/
+mlflow.db
+
+# Environment variables and secrets
+.env
+
+# Editor and operating system files
+.vscode/
+.DS_Store
