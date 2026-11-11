@@ -108,7 +108,7 @@ The API returns the predicted churn class, churn probability, and prediction inf
 Clone the repository:
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/LegitSJ/mlflow-customer-churn.git
 cd mlflow-customer-churn
 ```
 
@@ -156,6 +156,83 @@ Access the API:
 http://127.0.0.1:8000/docs
 ```
 
+
+## CI/CD Pipeline
+
+This project uses GitHub Actions to automate testing, Docker image building, and publishing to GitHub Container Registry (GHCR).
+
+### Workflow
+
+The CI/CD pipeline is triggered by pushes and pull requests targeting the `main` branch.
+
+1. **Checkout:** GitHub Actions checks out the repository.
+2. **Environment setup:** Sets up Python 3.14 and installs project dependencies.
+3. **Automated testing:** Runs the Pytest test suite.
+4. **Docker build:** If tests pass on a push to `main`, GitHub Actions builds the Docker image.
+5. **Image publishing:** The image is published to GitHub Container Registry (GHCR).
+
+Pull requests run the tests but do not publish Docker images.
+
+### CI/CD Architecture
+
+```mermaid
+flowchart TD
+    A[Push or Pull Request to main] --> B[GitHub Actions]
+    B --> C[Set up Python Environment]
+    C --> D[Install Dependencies]
+    D --> E[Run Pytest]
+    E --> F{Tests Pass?}
+    F -->|No| G[Workflow Fails]
+    F -->|Yes| H{Push to main?}
+    H -->|No| I[CI Complete]
+    H -->|Yes| J[Build Docker Image]
+    J --> K[Publish to GHCR]
+    K --> L[latest Tag]
+    K --> M[Commit SHA Tag]
+```
+
+### Docker Image Registry
+
+The published Docker image is available at:
+
+`ghcr.io/legitsj/customer-churn-api`
+
+Two tags are published:
+
+- `latest` — Points to the most recently published image.
+- Commit SHA — Identifies the image associated with a specific Git commit.
+
+Using a commit-specific tag allows a particular build to be retrieved and tested independently of the moving `latest` tag.
+
+### Pull and Run a Published Image
+
+Pull the latest image:
+
+```bash
+docker pull ghcr.io/legitsj/customer-churn-api:latest
+```
+
+Alternatively, pull a specific commit version:
+
+```bash
+docker pull ghcr.io/legitsj/customer-churn-api:3be42b50c7fb4491023a44d3cba9759fde21c327
+```
+
+Run the API:
+
+```bash
+docker run --rm -p 8000:8000 ghcr.io/legitsj/customer-churn-api:3be42b50c7fb4491023a44d3cba9759fde21c327
+```
+
+Access the API documentation:
+
+`http://127.0.0.1:8000/docs`
+
+Check the API health endpoint:
+
+`http://127.0.0.1:8000/health`
+
+
 ## Running Tests
 
 Run the automated test suite:
@@ -189,7 +266,7 @@ mlflow-customer-churn/
 
 ## Future Improvements
 
-- Add continuous deployment (CD) to automate Docker image builds and publishing.
+- Implement automated deployment to a cloud hosting environment.
 - Implement model monitoring and data drift detection.
 - Explore model retraining automation.
 - Add model versioning and model registry workflows.
